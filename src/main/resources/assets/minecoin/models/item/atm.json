@@ -1,0 +1,6 @@
+{
+    "parent": "minecoin:block/atm",
+    "textures": {
+        "all": "minecoin:blocks/atm"
+    }
+}

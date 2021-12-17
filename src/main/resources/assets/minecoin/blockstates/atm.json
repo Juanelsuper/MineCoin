@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "facing=north": { "model": "minecoin:block/atm" },
+        "facing=down": { "model": "minecoin:block/atm" },
+        "facing=up": { "model": "minecoin:block/atm" },
+        "facing=east":  { "model": "minecoin:block/atm", "y": 90 },
+        "facing=south": { "model": "minecoin:block/atm", "y": 180 },
+        "facing=west":  { "model": "minecoin:block/atm", "y": 270 }
+    }
+}

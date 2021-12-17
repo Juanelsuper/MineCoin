@@ -1,0 +1,10 @@
+{
+	"item.minecoin.coin":"$1 coin",
+    "item.minecoin.bill_10":"$10 bill",
+    "item.minecoin.bill_50":"$50 bill",
+    "block.minecoin.atm": "ATM Machine",
+    "gui.minecoin.withdraw": "Withdraw",
+    "gui.minecoin.deposit": "Deposit",
+    "itemGroup.minecoin": "MineCoin"
+	
+}
