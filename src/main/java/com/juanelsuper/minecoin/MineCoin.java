@@ -11,6 +11,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -33,6 +35,7 @@ import com.juanelsuper.minecoin.items.MinecoinItemGroup;
 import com.juanelsuper.minecoin.lists.BlockList;
 import com.juanelsuper.minecoin.lists.ContainersList;
 import com.juanelsuper.minecoin.lists.ItemList;
+import com.juanelsuper.minecoin.nbt.PlayerBalanceProperties;
 import com.juanelsuper.minecoin.nbt.PlayerExtendedProperties;
 import com.juanelsuper.minecoin.nbt.PropertiesDispatcher;
 import com.juanelsuper.minecoin.network.Network;
@@ -61,6 +64,7 @@ public class MineCoin
 	{
 		//OreGeneration.setupOreGeneration();
 		Network.registerMessages();
+		CapabilityManager.INSTANCE.register(PlayerBalanceProperties.class, PlayerExtendedProperties.BALANCE_STORAGE, PlayerBalanceProperties::new);
 		MinecraftForge.EVENT_BUS.register(new ForgeEvents());
 	}
 
@@ -126,19 +130,23 @@ public class MineCoin
 		public void onEntityConstructing(AttachCapabilitiesEvent<Entity> event) {
 			if(event.getObject() instanceof PlayerEntity) {
 				if (!event.getObject().getCapability(PlayerExtendedProperties.BALANCE).isPresent()) {
-					event.addCapability(new ResourceLocation(modid + ":balance"), new PropertiesDispatcher());
+					event.addCapability(PlayerExtendedProperties.BALANCE_LOC, new PropertiesDispatcher());
 				}
 			}
 		}
 
 		@SubscribeEvent
 	    public void onPlayerCloned(PlayerEvent.Clone event) {
-	        if (event.isWasDeath()) {
-	            event.getOriginal().getCapability(PlayerExtendedProperties.BALANCE).ifPresent(oldData -> {
+	        if (event.isWasDeath()) {;
+	        	PlayerEntity deathPlayer = event.getOriginal();
+	        	LazyOptional<PlayerBalanceProperties> lazyProps = PlayerExtendedProperties.getBalance(deathPlayer);
+	        	lazyProps.ifPresent(oldData -> {
 	                PlayerExtendedProperties.getBalance(event.getPlayer()).ifPresent(balance -> {
 	                	balance.set(oldData.get());
 	                });
 	            });
+	        	lazyProps.invalidate();
+	        	
 	        }
 	    }
 	} 

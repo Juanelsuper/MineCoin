@@ -32,5 +32,6 @@ public class PropertiesDispatcher implements ICapabilityProvider, INBTSerializab
     public void deserializeNBT(CompoundNBT nbt) {
     	playerBalanceProperties.loadNBTData(nbt);
     }
+    
 
 }
