@@ -11,6 +11,8 @@ import com.juanelsuper.minecoin.utils.CoinableItem;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
@@ -24,8 +26,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ATMContainer extends Container{
 	
 	public static final ITextComponent CONTAINER_TITLE = new TranslationTextComponent("container.atm");
-	
-
+	private final IInventory atm;
     
     private Slot inSlot, out50, out10, out1; //TODO: make out an array
     @Nullable
@@ -37,6 +38,7 @@ public class ATMContainer extends Container{
 
 	public ATMContainer(int id, PlayerInventory playerInventory, IWorldPosCallable world) {
 		super(ContainersList.ATM_CONTAINER, id);
+		this.atm = new Inventory(4);
 		loadBalance(playerInventory.player);
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
@@ -46,25 +48,25 @@ public class ATMContainer extends Container{
         for (int k = 0; k < 9; ++k) {
             addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
         }
-        inSlot = addSlot(new Slot(playerInventory, 36, 116, 41) {
+        inSlot = addSlot(new Slot(atm, 0, 116, 41) {
 			@Override
 			public boolean mayPlace(ItemStack stack) {
 				return CoinableItem.getAcceptedItems().contains(stack.getItem());
 			}
         });
-        out50 = addSlot(new Slot(playerInventory, 37, 98, 7) {
+        out50 = addSlot(new Slot(atm, 1, 98, 7) {
 			@Override
 			public boolean mayPlace(ItemStack stack) {
 				return false;
 			}
         });
-        out10 = addSlot(new Slot(playerInventory, 38, 116, 7){
+        out10 = addSlot(new Slot(atm, 2, 116, 7){
 			@Override
 			public boolean mayPlace(ItemStack stack) {
 				return false;
 			}
         });
-        out1 = addSlot(new Slot(playerInventory, 39, 134, 7){
+        out1 = addSlot(new Slot(atm, 3, 134, 7){
 			@Override
 			public boolean mayPlace(ItemStack stack) {
 				return false;
